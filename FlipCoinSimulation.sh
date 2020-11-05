@@ -17,24 +17,24 @@ for (( i=1; i<=a; i++ ))
 do
 	if [ "${singlet[$i]}" = "H" ]
 	then
-		((h++))
+		((H++))
 	else
-		((t++))
+		((T++))
 	fi
 done
-perH=`expr $h \* 100 / $a`
-perT=`expr $t \* 100 / $a`
+perH=`expr $H \* 100 / $a`
+perT=`expr $T \* 100 / $a`
 echo "Flipping of Singlet"
 echo "H : $h : $perH"
 echo "T : $t : $perT"
-if [ $h -ge $t ]
+if [ $H -ge $T ]
 then
 	echo "Winning Combination is H with $perH %"
 else
 	echo "Winning Combination is T with $perT %"
 fi
 
-echo "------------------------------------------------------------------------------------------------------------------------"
+echo "--------------------------------------------------------------------------------------------------------------------------------------------"
 
 HH=0
 HT=0
@@ -57,7 +57,7 @@ do
                 doublet2[$i]="T"
         fi
 done
-for (( i=1; i<=a-1; i++ ))
+for (( i=1; i<a-1; i++ ))
 do
         for (( j=i+1; j<a; j++ ))
 	do
@@ -105,4 +105,118 @@ then
 
 fi
 
+echo "-------------------------------------------------------------------------------------------------------------------------------------------"
 
+HHH=0
+HHT=0
+HTH=0
+HTT=0
+TTT=0
+THT=0
+THH=0
+TTH=0
+for (( i=1; i<=a; i++ ))
+do
+        n=$((RANDOM%2))
+        p=$((RANDOM%2))
+        q=$((RANDOM%2))
+	if [ $n -eq 0 ]
+        then
+                triplet1[$i]="H"
+        else
+                triplet1[$i]="T"
+        fi
+        if [ $p -eq 0 ]
+        then
+                triplet2[$i]="H"
+        else
+                triplet2[$i]="T"
+        fi
+	if [ $q -eq 0 ]
+        then
+                triplet3[$i]="H"
+        else
+                triplet3[$i]="T"
+        fi
+
+done
+for (( i=1; i<a-2; i++ ))
+do
+        for (( j=i+1; j<a-1; j++ ))
+        do
+		for(( k=j+1; k<a; k++ ))
+		do
+                	if [ "${triplet1[$i]}""${triplet2[$j]}""${triplet3[$k]}" == "HHH" ]
+                	then
+                        	echo "HHH"
+                        	((HHH++))
+                        elif [ "${triplet1[$i]}""${triplet2[$j]}""${triplet3[$k]}" == "HHT" ]
+                        then
+                                echo "HHT"
+                                ((HHT++))
+                        elif [ "${triplet1[$i]}""${triplet2[$j]}""${triplet3[$k]}" == "HTH" ]
+                        then
+                                echo "HTH"
+                                ((HTH++))
+                        elif [ "${triplet1[$i]}""${triplet2[$j]}""${triplet3[$k]}" == "THH" ]
+                        then
+                                echo "THH"
+                                ((THH++))
+                        elif [ "${triplet1[$i]}""${triplet2[$j]}""${triplet3[$k]}" == "HTT" ]
+                        then
+                                echo "HTT"
+                                ((HTT++))
+                        elif [ "${triplet1[$i]}""${triplet2[$j]}""${triplet3[$k]}" == "THT" ]
+                        then
+                                echo "THT"
+                                ((THT++))
+                        elif [ "${triplet1[$i]}""${triplet2[$j]}""${triplet3[$k]}" == "TTH" ]
+                        then
+                                echo "TTH"
+                                ((TTH++))
+                        elif [ "${triplet1[$i]}""${triplet2[$j]}""${triplet3[$k]}" == "TTT" ]
+                        then
+                                echo "TTT"
+                                ((TTT++))
+                	fi
+		done
+        done
+done
+Total=`expr $HHH + $HHT + $HTH + $HTT + $TTT + $THT + $THH + $TTH`
+perHHH=0
+perHHH=`expr $HHH \* 100 / $Total`
+perHHT=0
+perHHT=`expr $HHT \* 100 / $Total`
+perHTH=0
+perHTH=`expr $HTH \* 100 / $Total`
+PerHTT=0
+perHTT=`expr $HTT \* 100 / $Total`
+PerTTT=0
+perTTT=`expr $TTT \* 100 / $Total`
+PerTHT=0
+perTHT=`expr $THT \* 100 / $Total`
+perTHH=0
+perTHH=`expr $THH \* 100 / $Total`
+perTTH=0
+perTTH=`expr $TTH \* 100 / $Total`
+echo "Flipping of Triplet"
+echo "HHH : $HHH : $perHHH"
+echo "HHT : $HHT : $perHHT"
+echo "HTH : $HTH : $perHTH"
+echo "HTT : $HTT : $perHTT"
+echo "TTT : $TTT : $perTTT"
+echo "THT : $THT : $perTHT"
+echo "THH : $THH : $perTHH"
+echo "TTH : $TTH : $perTTH"
+declare -A array
+max=0
+array=([HHH]=$HHH [HHT]=$HHT [HTH]=$HTH [HTT]=$HTT [TTT]=$TTT [THT]=$THT [THH]=$THH [TTH]=$TTH)
+for i in ${!array[@]}
+do
+	if [[ $i -gt $max ]]
+	then
+		max=$i
+		maxed=${array[$i]}
+		echo "$max : $maxed"
+	fi
+done
