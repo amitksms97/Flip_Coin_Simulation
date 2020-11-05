@@ -138,7 +138,6 @@ do
         else
                 triplet3[$i]="T"
         fi
-
 done
 for (( i=1; i<a-2; i++ ))
 do
@@ -208,15 +207,16 @@ echo "TTT : $TTT : $perTTT"
 echo "THT : $THT : $perTHT"
 echo "THH : $THH : $perTHH"
 echo "TTH : $TTH : $perTTH"
-declare -A array
+declare -A dict
 max=0
-array=([HHH]=$HHH [HHT]=$HHT [HTH]=$HTH [HTT]=$HTT [TTT]=$TTT [THT]=$THT [THH]=$THH [TTH]=$TTH)
-for i in ${!array[@]}
+dict=([HHH]=$HHH [HHT]=$HHT [HTH]=$HTH [HTT]=$HTT [TTT]=$TTT [THT]=$THT [THH]=$THH [TTH]=$TTH)
+declare -a array
+array=("${dict[@]}")
+for (( i=0; i<${#array[@]}; i++ ))
 do
-	if [[ $i -gt $max ]]
+	if [[ ${array[$i]} -gt $max ]]
 	then
 		max=$i
-		maxed=${array[$i]}
-		echo "$max : $maxed"
 	fi
 done
+
